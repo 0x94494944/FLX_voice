@@ -16,11 +16,8 @@ local Keys = {
 	["NENTER"] = 201, ["N4"] = 108, ["N5"] = 60, ["N6"] = 107, ["N+"] = 96, ["N-"] = 97, ["N7"] = 117, ["N8"] = 61, ["N9"] = 118
 }
 
-local NomJoueur = 10
 local isUiOpen = false 
 local isTalking = false
-local r,g,b,a = 166,166,255,255 
-local voice = {default = 5.0, shout = 12.0, whisper = 1.0, current = 0}
 
 Citizen.CreateThread(function()
 	while true do
@@ -44,6 +41,10 @@ Citizen.CreateThread(function()
 		end
 	end
 end)
+
+local r,g,b,a = 166,166,255,255 
+
+local voice = {default = 5.0, shout = 12.0, whisper = 1.0, current = 0}
 
 AddEventHandler('onClientMapStart', function()
 	NetworkSetTalkerProximity(voice.default)
@@ -76,8 +77,10 @@ Citizen.CreateThread(function()
     end
 end)
 
+local playerNamesDist = 10
+
 Citizen.CreateThread(function()
-    if Config.ActiverLaLigne then
+    if Config.EnableMarkerWhenTalking then
         while true do
             for id = 0, 31 do
                 if  ((NetworkIsPlayerActive( id )) and GetPlayerPed( id ) ~= GetPlayerPed( -1 )) then
@@ -88,7 +91,7 @@ Citizen.CreateThread(function()
                     distance = math.floor(GetDistanceBetweenCoords(x1,  y1,  z1,  x2,  y2,  z2,  true))
             local takeaway = 0.95
 
-                    if ((distance < NomJoueur) and IsEntityVisible(GetPlayerPed(id))) ~= GetPlayerPed( -1 ) then
+                    if ((distance < playerNamesDist) and IsEntityVisible(GetPlayerPed(id))) ~= GetPlayerPed( -1 ) then
                 if NetworkIsPlayerTalking(id) then
                     DrawMarker(25,x2,y2,z2 - takeaway, 0, 0, 0, 0, 0, 0, 1.0, 1.0, 10.3, 0, 132, 8, 105, 0, 0, 2, 0, 0, 0, 0)
                 end
@@ -103,6 +106,7 @@ Citizen.CreateThread(function()
     end
 end)
 
+
 function Marker(type, x, y, z, voiceS)
-     DrawMarker(type, x, y, z - 1.2, 0.0, 0.0, 0.0, 0, 0.0, 0.0, voiceS, voiceS, 1.0, r, g, b, a, false, true, 2, false, false, false, false)
+     DrawMarker(type, x, y, z - 1.2, 0.0, 0.0, 0.0, 0, 0.0, 0.0, voiceS, voiceS, 1.0, 0, 0, 255, a, false, true, 2, false, false, false, false)
 end
