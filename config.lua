@@ -6,4 +6,4 @@
 
 Config = {}
 
-Config.ActiverLaLigne = true
+Config.EnableMarkerWhenTalking = true
